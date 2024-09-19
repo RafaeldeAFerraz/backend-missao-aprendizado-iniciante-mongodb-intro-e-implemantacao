@@ -26,8 +26,10 @@ async function main() {
   //              0       1         2
 
   // Endpoint Read All [GET] /personagens
-  app.get('/personagem', function (req, res) {
-    res.send(lista.filter(Boolean))
+  app.get('/personagem', async function (req, res) {
+    // Acessamos a lista de itens na collection do MongoDB
+    const itens = await collection.find().toArray()
+    res.send(itens)
   })
 
   // Endpoint Count [GET] /personagem/count
