@@ -1,5 +1,5 @@
 const express = require('express')
-const { MongoClient } = require('mongodb')
+const { MongoClient, ObjectId } = require('mongodb')
 
 // Preparamos as informações de acesso ao banco de dados
 const dbUrl = 'mongodb+srv://admin:KJsim29sjakjm437A@cluster0.zt1ly.mongodb.net'
@@ -32,20 +32,19 @@ async function main() {
     res.send(itens)
   })
 
-  // Endpoint Count [GET] /personagem/count
-  app.get("/personagem/count", function (req, res) {
-    const totalItens = lista.length;
-    res.send('Número total de itens: ' + totalItens);
-  });
+  // // Endpoint Count [GET] /personagem/count
+  // app.get("/personagem/count", function (req, res) {
+  //   const totalItens = lista.length;
+  //   res.send('Número total de itens: ' + totalItens);
+  // });
 
   // Endpoint Read by ID [GET] /personagem/:id
-  app.get('/personagem/:id', function (req, res) {
+  app.get('/personagem/:id', async function (req, res) {
     // Acessamos o parâmetro de rota ID
     const id = req.params.id
 
-    // Acessa o item na lista usando o ID - 1
-    const item = lista[id - 1]
-
+    // Acessa o item na collection usando o ID 
+    const item = await collection.findOne( { _id: new ObjectId(id) } )
     // Checamos se o item está obtido é existente
     if (!item) {
       return res.status(404).send('Item não encontrado.')
